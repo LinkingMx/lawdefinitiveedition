@@ -41,7 +41,7 @@ test('can list documents', function () {
 });
 
 test('can create document with all required fields', function () {
-    Storage::fake('private');
+    Storage::fake('public');
 
     $documentType = DocumentType::factory()->create();
     $branch = Branch::factory()->create();
@@ -63,7 +63,7 @@ test('can create document with all required fields', function () {
 });
 
 test('can create document with optional description', function () {
-    Storage::fake('private');
+    Storage::fake('public');
 
     $documentType = DocumentType::factory()->create();
     $branch = Branch::factory()->create();
@@ -85,7 +85,7 @@ test('can create document with optional description', function () {
 });
 
 test('can create document with optional expires_at', function () {
-    Storage::fake('private');
+    Storage::fake('public');
 
     $documentType = DocumentType::factory()->create();
     $branch = Branch::factory()->create();
@@ -107,7 +107,7 @@ test('can create document with optional expires_at', function () {
 });
 
 test('document_type_id is required', function () {
-    Storage::fake('private');
+    Storage::fake('public');
 
     $branch = Branch::factory()->create();
     $file = UploadedFile::fake()->create('document.pdf', 1024);
@@ -122,7 +122,7 @@ test('document_type_id is required', function () {
 });
 
 test('branch_id is required', function () {
-    Storage::fake('private');
+    Storage::fake('public');
 
     $documentType = DocumentType::factory()->create();
     $file = UploadedFile::fake()->create('document.pdf', 1024);
@@ -150,7 +150,7 @@ test('file is required', function () {
 });
 
 test('can edit document', function () {
-    Storage::fake('private');
+    Storage::fake('public');
 
     $document = Document::factory()->create();
 
@@ -293,7 +293,7 @@ test('can sort documents by document type', function () {
 });
 
 test('uploaded_by is automatically filled with authenticated user', function () {
-    Storage::fake('private');
+    Storage::fake('public');
 
     $user = User::factory()->create();
     $this->actingAs($user);
@@ -361,7 +361,7 @@ test('can bulk force delete documents', function () {
 });
 
 test('metadata is auto-captured on file upload', function () {
-    Storage::fake('private');
+    Storage::fake('public');
 
     $documentType = DocumentType::factory()->create();
     $branch = Branch::factory()->create();

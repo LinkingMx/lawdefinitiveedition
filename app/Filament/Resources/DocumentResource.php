@@ -77,7 +77,7 @@ class DocumentResource extends Resource
                         Forms\Components\FileUpload::make('file_path')
                             ->label('File')
                             ->required(fn (string $operation): bool => $operation === 'create')
-                            ->disk('private')
+                            ->disk('public')
                             ->directory('documents')
                             ->maxSize(10240) // 10MB in KB
                             ->preserveFilenames()
@@ -203,7 +203,7 @@ class DocumentResource extends Resource
                     ->icon('heroicon-o-arrow-down-tray')
                     ->color('success')
                     ->action(function (Document $record) {
-                        if (! Storage::disk('private')->exists($record->file_path)) {
+                        if (! Storage::disk('public')->exists($record->file_path)) {
                             Notification::make()
                                 ->title('File not found')
                                 ->body('The requested file could not be found in storage.')
@@ -221,7 +221,7 @@ class DocumentResource extends Resource
                             ->icon('heroicon-o-arrow-down-tray')
                             ->send();
 
-                        return Storage::disk('private')->download($record->file_path, $record->original_filename);
+                        return Storage::disk('public')->download($record->file_path, $record->original_filename);
                     }),
 
                 Tables\Actions\Action::make('preview')
@@ -234,10 +234,7 @@ class DocumentResource extends Resource
                         'image/png',
                         'image/gif',
                     ]))
-                    ->url(fn (Document $record) => Storage::disk('private')->temporaryUrl(
-                        $record->file_path,
-                        now()->addMinutes(5)
-                    ))
+                    ->url(fn (Document $record) => Storage::disk('public')->url($record->file_path))
                     ->openUrlInNewTab(),
 
                 Tables\Actions\EditAction::make(),
