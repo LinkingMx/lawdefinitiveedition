@@ -7,6 +7,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Branch extends Model
@@ -34,5 +35,13 @@ class Branch extends Model
     {
         return $this->belongsToMany(User::class)
             ->withTimestamps();
+    }
+
+    /**
+     * Get the documents for the branch.
+     */
+    public function documents(): HasMany
+    {
+        return $this->hasMany(Document::class);
     }
 }

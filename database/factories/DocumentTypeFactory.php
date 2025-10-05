@@ -26,31 +26,8 @@ class DocumentTypeFactory extends Factory
      */
     public function definition(): array
     {
-        $documentTypes = [
-            'Contract',
-            'Invoice',
-            'Agreement',
-            'Memorandum',
-            'Letter',
-            'Report',
-            'Proposal',
-            'Certificate',
-            'Affidavit',
-            'Petition',
-            'Complaint',
-            'Motion',
-            'Brief',
-            'Pleading',
-            'Deposition',
-            'Subpoena',
-            'Warrant',
-            'Order',
-            'Judgment',
-            'Decree',
-        ];
-
         return [
-            'name' => fake()->unique()->randomElement($documentTypes),
+            'name' => fake()->unique()->words(3, true).' '.fake()->numberBetween(1, 999999),
             'description' => fake()->sentence(12),
         ];
     }
