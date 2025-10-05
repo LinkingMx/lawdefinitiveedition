@@ -32,6 +32,9 @@ class UserFactory extends Factory
             'two_factor_secret' => Str::random(10),
             'two_factor_recovery_codes' => Str::random(10),
             'two_factor_confirmed_at' => now(),
+            'is_active' => true,
+            'avatar' => 'avatars/'.fake()->uuid().'.jpg',
+            'last_login_at' => fake()->optional(0.7)->dateTimeBetween('-30 days', 'now'),
         ];
     }
 
@@ -54,6 +57,36 @@ class UserFactory extends Factory
             'two_factor_secret' => null,
             'two_factor_recovery_codes' => null,
             'two_factor_confirmed_at' => null,
+        ]);
+    }
+
+    /**
+     * Indicate that the user is inactive.
+     */
+    public function inactive(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'is_active' => false,
+        ]);
+    }
+
+    /**
+     * Indicate that the user has no avatar.
+     */
+    public function withoutAvatar(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'avatar' => null,
+        ]);
+    }
+
+    /**
+     * Indicate that the user has never logged in.
+     */
+    public function neverLoggedIn(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'last_login_at' => null,
         ]);
     }
 }
