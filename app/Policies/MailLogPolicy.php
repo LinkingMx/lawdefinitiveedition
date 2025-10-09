@@ -3,8 +3,8 @@
 namespace App\Policies;
 
 use App\Models\User;
-use Tapp\FilamentMailLog\Models\MailLog;
 use Illuminate\Auth\Access\HandlesAuthorization;
+use Tapp\FilamentMailLog\Models\MailLog;
 
 class MailLogPolicy
 {
