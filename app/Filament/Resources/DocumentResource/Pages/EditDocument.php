@@ -23,7 +23,7 @@ class EditDocument extends EditRecord
                 ->icon('heroicon-o-arrow-down-tray')
                 ->color('success')
                 ->action(function (Document $record) {
-                    if (! Storage::disk('private')->exists($record->file_path)) {
+                    if (! Storage::disk('public')->exists($record->file_path)) {
                         Notification::make()
                             ->title('File not found')
                             ->body('The requested file could not be found in storage.')
@@ -41,7 +41,7 @@ class EditDocument extends EditRecord
                         ->icon('heroicon-o-arrow-down-tray')
                         ->send();
 
-                    return Storage::disk('private')->download($record->file_path, $record->original_filename);
+                    return Storage::disk('public')->download($record->file_path, $record->original_filename);
                 }),
 
             Actions\DeleteAction::make()

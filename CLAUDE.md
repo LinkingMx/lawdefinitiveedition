@@ -135,13 +135,17 @@ The application supports light/dark/auto themes:
 ### Filament Admin Panel
 The application uses Filament for the admin interface:
 - **Admin routes**: Automatically registered at `/admin` by Filament
+- **Panel Provider**: `app/Providers/Filament/AdminPanelProvider.php` - configures the admin panel
 - **Resources**: Located in `app/Filament/Resources/` - define CRUD interfaces for models
 - **Pages**: Located in `app/Filament/Pages/` - custom admin pages
 - **Widgets**: Located in `app/Filament/Widgets/` - dashboard widgets
 - **Configuration**: `config/filament.php` - Filament settings
+- **Brand**: Logo at `public/logo_costeno_LP.svg`, brand name "Costeño LP"
+- **Home URL**: Redirects to Documents resource index page
 - **Preference**: Use Filament's built-in components and avoid custom CSS/JS when possible
 - **Navigation after actions**: Create and Edit actions must redirect back to the resource list page
 - **Notifications standard**: All notifications must include icon, title, and subtitle (body)
+- **File storage**: Uses 'public' disk for file uploads (configured in `config/filament.php`)
 
 ## Key Configuration Files
 
@@ -164,9 +168,40 @@ The application uses Filament for the admin interface:
 7. Access frontend at `http://localhost:8000` (or APP_URL from .env)
 8. Access admin panel at `http://localhost:8000/admin`
 
+## Domain Models
+
+The application manages legal/administrative documents with the following key models:
+
+**User** (app/Models/User.php):
+- Authentication via Laravel Fortify
+- Two-factor authentication support
+- Belongs to multiple Branches
+- Tracks uploaded Documents
+- Fields: name, email, avatar, phone, address, is_active, last_login_at
+
+**Branch** (app/Models/Branch.php):
+- Organizational units (e.g., offices, departments)
+- Has many Users and Documents
+- Fields: name, code, address, phone, email, is_active
+
+**DocumentType** (app/Models/DocumentType.php):
+- Categories for documents
+- Has many Documents
+- Fields: name, description
+- Soft deletes enabled
+
+**Document** (app/Models/Document.php):
+- Core entity for file management
+- Belongs to: DocumentType, Branch, User (uploadedBy)
+- File handling with automatic metadata capture (original_filename, file_size, mime_type)
+- Optional expiration tracking (expires_at)
+- Method: `isExpired()` - checks if document has expired
+- Soft deletes enabled
+
 ## Development Guidelines
 
 - **Admin Panel**: Always prefer Filament's built-in functionality for admin features. Avoid custom CSS/JS when possible.
 - **Planning**: All agents must ask clarifying questions before implementing any functionality.
 - **Implementation**: Always show a detailed plan before implementing new features, without exception.
 - **Soft Deletes**: All Filament resources and Laravel models should use soft deletes by default.
+- **File Uploads**: Use 'public' disk consistently across all Filament resources for file storage.
