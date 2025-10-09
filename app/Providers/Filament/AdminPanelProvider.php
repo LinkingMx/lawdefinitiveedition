@@ -18,6 +18,7 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Joaopaulolndev\FilamentGeneralSettings\FilamentGeneralSettingsPlugin;
+use ShuvroRoy\FilamentSpatieLaravelBackup\FilamentSpatieLaravelBackupPlugin;
 use Tapp\FilamentMailLog\FilamentMailLogPlugin;
 
 class AdminPanelProvider extends PanelProvider
@@ -82,6 +83,8 @@ class AdminPanelProvider extends PanelProvider
                     ->setNavigationLabel('Configuración de correo')
                     ->setIcon('heroicon-o-cog-6-tooth')
                     ->canAccess(fn () => auth()->user()?->hasRole('super_admin') ?? false),
+                FilamentSpatieLaravelBackupPlugin::make()
+                    ->usingPage(\ShuvroRoy\FilamentSpatieLaravelBackup\Pages\Backups::class),
             ]);
     }
 }
