@@ -21,42 +21,44 @@ class BranchResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-building-office-2';
 
-    protected static ?string $navigationGroup = 'Administration';
+    protected static ?string $navigationGroup = 'Administración';
 
-    protected static ?string $modelLabel = 'Branch';
+    protected static ?string $modelLabel = 'Sucursal';
 
-    protected static ?string $pluralModelLabel = 'Branches';
+    protected static ?string $pluralModelLabel = 'Sucursales';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\Section::make('Branch Information')
+                Forms\Components\Section::make('Información de la Sucursal')
                     ->schema([
                         Forms\Components\TextInput::make('name')
+                            ->label('Nombre')
                             ->required()
                             ->maxLength(255)
                             ->autofocus()
                             ->prefixIcon('heroicon-o-building-storefront'),
 
                         Forms\Components\Textarea::make('address')
+                            ->label('Dirección')
                             ->maxLength(500)
                             ->rows(3)
                             ->columnSpanFull(),
 
                         Forms\Components\TextInput::make('contact_name')
-                            ->label('Contact Name')
+                            ->label('Nombre de Contacto')
                             ->maxLength(255)
                             ->prefixIcon('heroicon-o-user'),
 
                         Forms\Components\TextInput::make('contact_email')
-                            ->label('Contact Email')
+                            ->label('Correo de Contacto')
                             ->email()
                             ->maxLength(255)
                             ->prefixIcon('heroicon-o-envelope'),
 
                         Forms\Components\TextInput::make('contact_phone')
-                            ->label('Contact Phone')
+                            ->label('Teléfono de Contacto')
                             ->tel()
                             ->maxLength(255)
                             ->prefixIcon('heroicon-o-phone'),
@@ -70,38 +72,42 @@ class BranchResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('name')
+                    ->label('Nombre')
                     ->searchable()
                     ->sortable()
                     ->weight(FontWeight::Medium),
 
                 Tables\Columns\TextColumn::make('address')
+                    ->label('Dirección')
                     ->limit(50)
                     ->sortable()
                     ->placeholder('—'),
 
                 Tables\Columns\TextColumn::make('contact_name')
-                    ->label('Contact Name')
+                    ->label('Nombre de Contacto')
                     ->sortable()
                     ->placeholder('—'),
 
                 Tables\Columns\TextColumn::make('contact_email')
-                    ->label('Contact Email')
+                    ->label('Correo de Contacto')
                     ->icon('heroicon-o-envelope')
                     ->sortable()
                     ->placeholder('—'),
 
                 Tables\Columns\TextColumn::make('contact_phone')
-                    ->label('Contact Phone')
+                    ->label('Teléfono de Contacto')
                     ->icon('heroicon-o-phone')
                     ->sortable()
                     ->placeholder('—'),
 
                 Tables\Columns\TextColumn::make('created_at')
+                    ->label('Creado el')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
 
                 Tables\Columns\TextColumn::make('updated_at')
+                    ->label('Actualizado el')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),

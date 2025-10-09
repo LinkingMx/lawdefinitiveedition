@@ -23,18 +23,22 @@ class DocumentResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-document-arrow-up';
 
-    protected static ?string $navigationGroup = 'Documents';
+    protected static ?string $navigationGroup = 'Documentos';
+
+    protected static ?string $modelLabel = 'Documento';
+
+    protected static ?string $pluralModelLabel = 'Documentos';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\Section::make('Document Classification')
+                Forms\Components\Section::make('Clasificación del Documento')
                     ->icon('heroicon-o-folder')
-                    ->description('Select the document type and associated branch')
+                    ->description('Seleccione el tipo de documento y la sucursal asociada')
                     ->schema([
                         Forms\Components\Select::make('document_type_id')
-                            ->label('Document Type')
+                            ->label('Tipo de Documento')
                             ->relationship('documentType', 'name')
                             ->required()
                             ->searchable()
@@ -43,7 +47,7 @@ class DocumentResource extends Resource
                             ->columnSpanFull(),
 
                         Forms\Components\Select::make('branch_id')
-                            ->label('Branch')
+                            ->label('Sucursal')
                             ->relationship('branch', 'name')
                             ->required()
                             ->searchable()
@@ -53,29 +57,29 @@ class DocumentResource extends Resource
                     ])
                     ->columns(2),
 
-                Forms\Components\Section::make('Document Details')
+                Forms\Components\Section::make('Detalles del Documento')
                     ->icon('heroicon-o-information-circle')
-                    ->description('Provide additional information about the document')
+                    ->description('Proporcione información adicional sobre el documento')
                     ->schema([
                         Forms\Components\Textarea::make('description')
-                            ->label('Description')
+                            ->label('Descripción')
                             ->maxLength(1000)
                             ->rows(4)
                             ->columnSpanFull(),
 
                         Forms\Components\DatePicker::make('expires_at')
-                            ->label('Expires At')
+                            ->label('Fecha de Vencimiento')
                             ->prefixIcon('heroicon-o-calendar')
                             ->minDate(now())
                             ->columnSpanFull(),
                     ]),
 
-                Forms\Components\Section::make('File Upload')
+                Forms\Components\Section::make('Carga de Archivo')
                     ->icon('heroicon-o-arrow-up-tray')
-                    ->description('Upload the document file')
+                    ->description('Cargue el archivo del documento')
                     ->schema([
                         Forms\Components\FileUpload::make('file_path')
-                            ->label('File')
+                            ->label('Archivo')
                             ->required(fn (string $operation): bool => $operation === 'create')
                             ->disk('public')
                             ->directory('documents')
@@ -107,57 +111,58 @@ class DocumentResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('documentType.name')
-                    ->label('Document Type')
+                    ->label('Tipo de Documento')
                     ->sortable()
                     ->searchable()
                     ->badge(),
 
                 Tables\Columns\TextColumn::make('branch.name')
-                    ->label('Branch')
+                    ->label('Sucursal')
                     ->sortable()
                     ->searchable()
                     ->badge()
                     ->color('info'),
 
                 Tables\Columns\TextColumn::make('description')
+                    ->label('Descripción')
                     ->limit(50)
                     ->sortable()
                     ->searchable()
-                    ->placeholder('No description'),
+                    ->placeholder('Sin descripción'),
 
                 Tables\Columns\TextColumn::make('original_filename')
-                    ->label('File')
+                    ->label('Archivo')
                     ->sortable()
                     ->searchable()
                     ->icon('heroicon-o-document')
                     ->iconColor('primary'),
 
                 Tables\Columns\TextColumn::make('file_size')
-                    ->label('Size')
+                    ->label('Tamaño')
                     ->formatStateUsing(fn (int $state): string => static::formatBytes($state))
                     ->sortable(),
 
                 Tables\Columns\TextColumn::make('expires_at')
-                    ->label('Expires')
+                    ->label('Vencimiento')
                     ->date()
                     ->sortable()
                     ->badge()
                     ->color(fn ($state, Document $record) => $record->isExpired() ? 'danger' : 'success')
-                    ->formatStateUsing(fn ($state) => $state ? $state->format('M d, Y') : 'Never'),
+                    ->formatStateUsing(fn ($state) => $state ? $state->format('d M, Y') : 'Nunca'),
 
                 Tables\Columns\TextColumn::make('uploadedBy.name')
-                    ->label('Uploaded By')
+                    ->label('Cargado Por')
                     ->sortable()
                     ->searchable(),
 
                 Tables\Columns\TextColumn::make('created_at')
-                    ->label('Uploaded At')
+                    ->label('Cargado el')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: false),
 
                 Tables\Columns\TextColumn::make('updated_at')
-                    ->label('Updated At')
+                    ->label('Actualizado el')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
@@ -165,22 +170,22 @@ class DocumentResource extends Resource
             ->defaultSort('created_at', 'desc')
             ->filters([
                 Tables\Filters\SelectFilter::make('document_type_id')
-                    ->label('Document Type')
+                    ->label('Tipo de Documento')
                     ->relationship('documentType', 'name')
                     ->searchable()
                     ->preload(),
 
                 Tables\Filters\SelectFilter::make('branch_id')
-                    ->label('Branch')
+                    ->label('Sucursal')
                     ->relationship('branch', 'name')
                     ->searchable()
                     ->preload(),
 
                 Tables\Filters\TernaryFilter::make('expired')
-                    ->label('Expiration Status')
-                    ->placeholder('All documents')
-                    ->trueLabel('Expired only')
-                    ->falseLabel('Active only')
+                    ->label('Estado de Vencimiento')
+                    ->placeholder('Todos los documentos')
+                    ->trueLabel('Solo vencidos')
+                    ->falseLabel('Solo vigentes')
                     ->queries(
                         true: fn (Builder $query) => $query->whereNotNull('expires_at')->whereDate('expires_at', '<', now()),
                         false: fn (Builder $query) => $query->where(function ($q) {
@@ -190,7 +195,7 @@ class DocumentResource extends Resource
                     ),
 
                 Tables\Filters\SelectFilter::make('uploaded_by')
-                    ->label('Uploaded By')
+                    ->label('Cargado Por')
                     ->relationship('uploadedBy', 'name')
                     ->searchable()
                     ->preload(),
@@ -199,14 +204,14 @@ class DocumentResource extends Resource
             ])
             ->actions([
                 Tables\Actions\Action::make('download')
-                    ->label('Download')
+                    ->label('Descargar')
                     ->icon('heroicon-o-arrow-down-tray')
                     ->color('success')
                     ->action(function (Document $record) {
                         if (! Storage::disk('public')->exists($record->file_path)) {
                             Notification::make()
-                                ->title('File not found')
-                                ->body('The requested file could not be found in storage.')
+                                ->title('Archivo No Encontrado')
+                                ->body('El archivo solicitado no se pudo encontrar en el almacenamiento.')
                                 ->danger()
                                 ->icon('heroicon-o-exclamation-triangle')
                                 ->send();
@@ -215,8 +220,8 @@ class DocumentResource extends Resource
                         }
 
                         Notification::make()
-                            ->title('Download started')
-                            ->body("Downloading {$record->original_filename}")
+                            ->title('Descarga Iniciada')
+                            ->body("Descargando {$record->original_filename}")
                             ->success()
                             ->icon('heroicon-o-arrow-down-tray')
                             ->send();
@@ -225,7 +230,7 @@ class DocumentResource extends Resource
                     }),
 
                 Tables\Actions\Action::make('preview')
-                    ->label('Preview')
+                    ->label('Vista Previa')
                     ->icon('heroicon-o-eye')
                     ->color('info')
                     ->visible(fn (Document $record) => in_array($record->mime_type, [
@@ -243,8 +248,8 @@ class DocumentResource extends Resource
                     ->successNotification(
                         Notification::make()
                             ->success()
-                            ->title('Document deleted')
-                            ->body('The document has been moved to trash.')
+                            ->title('Documento Eliminado')
+                            ->body('El documento ha sido movido a la papelera.')
                             ->icon('heroicon-o-trash')
                     ),
             ])
@@ -254,24 +259,24 @@ class DocumentResource extends Resource
                         ->successNotification(
                             Notification::make()
                                 ->success()
-                                ->title('Documents deleted')
-                                ->body('Selected documents have been moved to trash.')
+                                ->title('Documentos Eliminados')
+                                ->body('Los documentos seleccionados han sido movidos a la papelera.')
                                 ->icon('heroicon-o-trash')
                         ),
                     Tables\Actions\ForceDeleteBulkAction::make()
                         ->successNotification(
                             Notification::make()
                                 ->success()
-                                ->title('Documents permanently deleted')
-                                ->body('Selected documents have been permanently deleted.')
+                                ->title('Documentos Eliminados Permanentemente')
+                                ->body('Los documentos seleccionados han sido eliminados permanentemente.')
                                 ->icon('heroicon-o-trash')
                         ),
                     Tables\Actions\RestoreBulkAction::make()
                         ->successNotification(
                             Notification::make()
                                 ->success()
-                                ->title('Documents restored')
-                                ->body('Selected documents have been restored.')
+                                ->title('Documentos Restaurados')
+                                ->body('Los documentos seleccionados han sido restaurados.')
                                 ->icon('heroicon-o-arrow-path')
                         ),
                 ]),

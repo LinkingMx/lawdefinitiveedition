@@ -20,17 +20,22 @@ class DocumentTypeResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-document-text';
 
-    protected static ?string $navigationGroup = 'Documents';
+    protected static ?string $navigationGroup = 'Documentos';
 
     protected static ?int $navigationSort = 10;
+
+    protected static ?string $modelLabel = 'Tipo de Documento';
+
+    protected static ?string $pluralModelLabel = 'Tipos de Documento';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\Section::make('Document Type Information')
+                Forms\Components\Section::make('Información del Tipo de Documento')
                     ->schema([
                         Forms\Components\TextInput::make('name')
+                            ->label('Nombre')
                             ->required()
                             ->maxLength(255)
                             ->unique(ignoreRecord: true)
@@ -39,6 +44,7 @@ class DocumentTypeResource extends Resource
                             ->columnSpanFull(),
 
                         Forms\Components\Textarea::make('description')
+                            ->label('Descripción')
                             ->maxLength(500)
                             ->rows(3)
                             ->columnSpanFull(),
@@ -52,21 +58,25 @@ class DocumentTypeResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('name')
+                    ->label('Nombre')
                     ->searchable()
                     ->sortable()
                     ->weight('medium'),
 
                 Tables\Columns\TextColumn::make('description')
+                    ->label('Descripción')
                     ->limit(50)
                     ->sortable()
-                    ->placeholder('No description'),
+                    ->placeholder('Sin descripción'),
 
                 Tables\Columns\TextColumn::make('created_at')
+                    ->label('Creado el')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
 
                 Tables\Columns\TextColumn::make('updated_at')
+                    ->label('Actualizado el')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
@@ -80,24 +90,24 @@ class DocumentTypeResource extends Resource
                     ->successNotification(
                         fn () => \Filament\Notifications\Notification::make()
                             ->success()
-                            ->title('Document Type Deleted')
-                            ->body('The document type has been deleted successfully.')
+                            ->title('Tipo de Documento Eliminado')
+                            ->body('El tipo de documento ha sido eliminado exitosamente.')
                             ->icon('heroicon-o-trash')
                     ),
                 Tables\Actions\RestoreAction::make()
                     ->successNotification(
                         fn () => \Filament\Notifications\Notification::make()
                             ->success()
-                            ->title('Document Type Restored')
-                            ->body('The document type has been restored successfully.')
+                            ->title('Tipo de Documento Restaurado')
+                            ->body('El tipo de documento ha sido restaurado exitosamente.')
                             ->icon('heroicon-o-arrow-path')
                     ),
                 Tables\Actions\ForceDeleteAction::make()
                     ->successNotification(
                         fn () => \Filament\Notifications\Notification::make()
                             ->danger()
-                            ->title('Document Type Permanently Deleted')
-                            ->body('The document type has been permanently deleted.')
+                            ->title('Tipo de Documento Eliminado Permanentemente')
+                            ->body('El tipo de documento ha sido eliminado permanentemente.')
                             ->icon('heroicon-o-trash')
                     ),
             ])

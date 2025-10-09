@@ -24,25 +24,27 @@ class UserResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-users';
 
-    protected static ?string $navigationGroup = 'Administration';
+    protected static ?string $navigationGroup = 'Administración';
 
-    protected static ?string $modelLabel = 'User';
+    protected static ?string $modelLabel = 'Usuario';
 
-    protected static ?string $pluralModelLabel = 'Users';
+    protected static ?string $pluralModelLabel = 'Usuarios';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\Section::make('User Information')
+                Forms\Components\Section::make('Información del Usuario')
                     ->schema([
                         Forms\Components\TextInput::make('name')
+                            ->label('Nombre')
                             ->required()
                             ->maxLength(255)
                             ->autofocus()
                             ->prefixIcon('heroicon-o-user'),
 
                         Forms\Components\TextInput::make('email')
+                            ->label('Correo Electrónico')
                             ->email()
                             ->required()
                             ->unique(ignoreRecord: true)
@@ -59,9 +61,10 @@ class UserResource extends Resource
                     ])
                     ->columns(2),
 
-                Forms\Components\Section::make('Password')
+                Forms\Components\Section::make('Contraseña')
                     ->schema([
                         Forms\Components\TextInput::make('password')
+                            ->label('Contraseña')
                             ->password()
                             ->required(fn (string $operation): bool => $operation === 'create')
                             ->dehydrated(fn ($state) => filled($state))
@@ -72,6 +75,7 @@ class UserResource extends Resource
                             ->revealable(),
 
                         Forms\Components\TextInput::make('password_confirmation')
+                            ->label('Confirmar Contraseña')
                             ->password()
                             ->required(fn (string $operation): bool => $operation === 'create')
                             ->dehydrated(false)
@@ -81,49 +85,49 @@ class UserResource extends Resource
                     ->columns(2)
                     ->visible(fn (string $operation): bool => $operation === 'create' || $operation === 'edit'),
 
-                Forms\Components\Section::make('Security & Verification')
+                Forms\Components\Section::make('Seguridad y Verificación')
                     ->schema([
                         Forms\Components\Toggle::make('email_verified_at')
-                            ->label('Email Verified')
-                            ->helperText('Mark the user\'s email as verified')
+                            ->label('Correo Verificado')
+                            ->helperText('Marcar el correo del usuario como verificado')
                             ->afterStateHydrated(function ($component, $record) {
                                 $component->state($record?->email_verified_at !== null);
                             })
                             ->dehydrateStateUsing(fn ($state) => $state ? now() : null),
 
                         Forms\Components\Placeholder::make('two_factor_status')
-                            ->label('Two-Factor Authentication')
+                            ->label('Verificación en Dos Pasos')
                             ->content(function ($record): string {
                                 if (! $record || ! $record->two_factor_confirmed_at) {
-                                    return 'Not enabled';
+                                    return 'No habilitada';
                                 }
 
                                 if (is_string($record->two_factor_confirmed_at)) {
-                                    return 'Enabled';
+                                    return 'Habilitada';
                                 }
 
-                                return 'Enabled on '.$record->two_factor_confirmed_at->format('M d, Y');
+                                return 'Habilitada el '.$record->two_factor_confirmed_at->format('d M, Y');
                             })
                             ->visible(fn (string $operation): bool => $operation === 'edit'),
                     ])
                     ->columns(2),
 
-                Forms\Components\Section::make('Account Status')
+                Forms\Components\Section::make('Estado de la Cuenta')
                     ->schema([
                         Forms\Components\Toggle::make('is_active')
-                            ->label('Active')
-                            ->helperText('Inactive users cannot log in')
+                            ->label('Activo')
+                            ->helperText('Los usuarios inactivos no pueden iniciar sesión')
                             ->default(true),
 
                         Forms\Components\Placeholder::make('last_login_at')
-                            ->label('Last Login')
+                            ->label('Último Acceso')
                             ->content(function ($record): string {
                                 if (! $record || ! $record->last_login_at) {
-                                    return 'Never';
+                                    return 'Nunca';
                                 }
 
                                 if (is_string($record->last_login_at)) {
-                                    return 'Recently';
+                                    return 'Recientemente';
                                 }
 
                                 return $record->last_login_at->diffForHumans();
@@ -132,14 +136,15 @@ class UserResource extends Resource
                     ])
                     ->columns(2),
 
-                Forms\Components\Section::make('Branch Assignment')
+                Forms\Components\Section::make('Asignación de Sucursales')
                     ->schema([
                         Forms\Components\Select::make('branches')
+                            ->label('Sucursales')
                             ->relationship('branches', 'name')
                             ->multiple()
                             ->preload()
                             ->searchable()
-                            ->helperText('Assign the user to one or more branches')
+                            ->helperText('Asignar el usuario a una o más sucursales')
                             ->columnSpanFull(),
                     ]),
             ]);
@@ -150,21 +155,24 @@ class UserResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\ImageColumn::make('avatar')
+                    ->label('Avatar')
                     ->circular()
                     ->defaultImageUrl(fn ($record) => 'https://ui-avatars.com/api/?name='.urlencode($record->name).'&color=7F9CF5&background=EBF4FF'),
 
                 Tables\Columns\TextColumn::make('name')
+                    ->label('Nombre')
                     ->searchable()
                     ->sortable()
                     ->weight(FontWeight::Medium),
 
                 Tables\Columns\TextColumn::make('email')
+                    ->label('Correo Electrónico')
                     ->icon('heroicon-o-envelope')
                     ->searchable()
                     ->sortable(),
 
                 Tables\Columns\IconColumn::make('email_verified_at')
-                    ->label('Verified')
+                    ->label('Verificado')
                     ->boolean()
                     ->trueIcon('heroicon-o-shield-check')
                     ->falseIcon('heroicon-o-shield-exclamation')
@@ -173,7 +181,7 @@ class UserResource extends Resource
                     ->sortable(),
 
                 Tables\Columns\IconColumn::make('two_factor_confirmed_at')
-                    ->label('2FA')
+                    ->label('Verificación en 2 Pasos')
                     ->boolean()
                     ->trueIcon('heroicon-o-device-phone-mobile')
                     ->falseIcon('heroicon-o-x-circle')
@@ -182,7 +190,7 @@ class UserResource extends Resource
                     ->sortable(),
 
                 Tables\Columns\IconColumn::make('is_active')
-                    ->label('Active')
+                    ->label('Activo')
                     ->boolean()
                     ->trueIcon('heroicon-o-check-circle')
                     ->falseIcon('heroicon-o-x-circle')
@@ -191,28 +199,32 @@ class UserResource extends Resource
                     ->sortable(),
 
                 Tables\Columns\TextColumn::make('branches.name')
+                    ->label('Sucursales')
                     ->badge()
                     ->separator(',')
-                    ->placeholder('No branches'),
+                    ->placeholder('Sin sucursales'),
 
                 Tables\Columns\TextColumn::make('last_login_at')
-                    ->label('Last Login')
+                    ->label('Último Acceso')
                     ->dateTime()
                     ->sortable()
                     ->since()
-                    ->placeholder('Never'),
+                    ->placeholder('Nunca'),
 
                 Tables\Columns\TextColumn::make('created_at')
+                    ->label('Creado el')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
 
                 Tables\Columns\TextColumn::make('updated_at')
+                    ->label('Actualizado el')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
 
                 Tables\Columns\TextColumn::make('deleted_at')
+                    ->label('Eliminado el')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
@@ -220,27 +232,27 @@ class UserResource extends Resource
             ->defaultSort('name', 'asc')
             ->filters([
                 Tables\Filters\SelectFilter::make('is_active')
-                    ->label('Status')
+                    ->label('Estado')
                     ->options([
-                        1 => 'Active',
-                        0 => 'Inactive',
+                        1 => 'Activo',
+                        0 => 'Inactivo',
                     ])
-                    ->placeholder('All users'),
+                    ->placeholder('Todos los usuarios'),
 
                 Tables\Filters\Filter::make('email_verified')
-                    ->label('Email Verified')
+                    ->label('Correo Verificado')
                     ->query(fn (Builder $query): Builder => $query->whereNotNull('email_verified_at')),
 
                 Tables\Filters\Filter::make('email_unverified')
-                    ->label('Email Unverified')
+                    ->label('Correo No Verificado')
                     ->query(fn (Builder $query): Builder => $query->whereNull('email_verified_at')),
 
                 Tables\Filters\Filter::make('two_factor_enabled')
-                    ->label('2FA Enabled')
+                    ->label('Verificación en 2 Pasos Habilitada')
                     ->query(fn (Builder $query): Builder => $query->whereNotNull('two_factor_confirmed_at')),
 
                 Tables\Filters\Filter::make('two_factor_disabled')
-                    ->label('2FA Disabled')
+                    ->label('Verificación en 2 Pasos Deshabilitada')
                     ->query(fn (Builder $query): Builder => $query->whereNull('two_factor_confirmed_at')),
 
                 Tables\Filters\TrashedFilter::make(),
@@ -250,13 +262,13 @@ class UserResource extends Resource
                     Tables\Actions\EditAction::make(),
 
                     Tables\Actions\Action::make('disable2fa')
-                        ->label('Disable 2FA')
+                        ->label('Deshabilitar Verificación en 2 Pasos')
                         ->icon('heroicon-o-device-phone-mobile')
                         ->color('warning')
                         ->requiresConfirmation()
-                        ->modalHeading('Disable Two-Factor Authentication')
-                        ->modalDescription('Are you sure you want to disable two-factor authentication for this user? They will be notified via email.')
-                        ->modalSubmitActionLabel('Yes, Disable 2FA')
+                        ->modalHeading('Deshabilitar Verificación en Dos Pasos')
+                        ->modalDescription('¿Está seguro que desea deshabilitar la verificación en dos pasos para este usuario? Se le notificará por correo electrónico.')
+                        ->modalSubmitActionLabel('Sí, Deshabilitar')
                         ->visible(fn ($record) => $record->two_factor_confirmed_at !== null)
                         ->action(function ($record) {
                             $record->update([
@@ -271,19 +283,19 @@ class UserResource extends Resource
                             Notification::make()
                                 ->success()
                                 ->icon('heroicon-o-device-phone-mobile')
-                                ->title('Two-Factor Authentication Disabled')
-                                ->body('2FA has been removed and the user has been notified via email.')
+                                ->title('Verificación en Dos Pasos Deshabilitada')
+                                ->body('La verificación en dos pasos ha sido removida y el usuario ha sido notificado por correo electrónico.')
                                 ->send();
                         }),
 
                     Tables\Actions\Action::make('sendVerificationEmail')
-                        ->label('Send Verification Email')
+                        ->label('Enviar Correo de Verificación')
                         ->icon('heroicon-o-envelope')
                         ->color('info')
                         ->requiresConfirmation()
-                        ->modalHeading('Send Verification Email')
-                        ->modalDescription('Send an email verification link to this user.')
-                        ->modalSubmitActionLabel('Send Email')
+                        ->modalHeading('Enviar Correo de Verificación')
+                        ->modalDescription('Enviar un enlace de verificación por correo electrónico a este usuario.')
+                        ->modalSubmitActionLabel('Enviar Correo')
                         ->visible(fn ($record) => $record->email_verified_at === null)
                         ->action(function ($record) {
                             // This would integrate with Laravel's email verification system
@@ -291,8 +303,8 @@ class UserResource extends Resource
                             Notification::make()
                                 ->success()
                                 ->icon('heroicon-o-envelope')
-                                ->title('Verification Email Sent')
-                                ->body('A verification email has been sent to '.$record->email)
+                                ->title('Correo de Verificación Enviado')
+                                ->body('Se ha enviado un correo de verificación a '.$record->email)
                                 ->send();
                         }),
 
