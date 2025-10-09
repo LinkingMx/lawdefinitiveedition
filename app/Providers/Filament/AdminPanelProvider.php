@@ -17,6 +17,7 @@ use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use Joaopaulolndev\FilamentGeneralSettings\FilamentGeneralSettingsPlugin;
 use Tapp\FilamentMailLog\FilamentMailLogPlugin;
 
 class AdminPanelProvider extends PanelProvider
@@ -46,7 +47,7 @@ class AdminPanelProvider extends PanelProvider
                     '950' => '#2a221a',
                 ],
                 // Opcional: Para una mejor armonía, usamos una escala de grises cálida
-                'gray' => Color::Stone, 
+                'gray' => Color::Stone,
                 'danger' => Color::Red,
                 'warning' => Color::Orange,
                 'success' => Color::Green,
@@ -74,7 +75,13 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->plugins([
                 FilamentShieldPlugin::make(),
-                FilamentMailLogPlugin::make()
+                FilamentMailLogPlugin::make(),
+                FilamentGeneralSettingsPlugin::make()
+                    ->setSort(3)
+                    ->setNavigationGroup('Administración')
+                    ->setNavigationLabel('Configuración General')
+                    ->setIcon('heroicon-o-cog-6-tooth')
+                    ->canAccess(fn () => auth()->user()?->hasRole('super_admin') ?? false),
             ]);
     }
 }
