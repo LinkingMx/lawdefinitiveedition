@@ -23,7 +23,7 @@ class BranchFactory extends Factory
     {
         return [
             'name' => fake()->company().' - '.fake()->city().' Branch',
-            'address' => fake()->streetAddress().', '.fake()->city().', '.fake()->stateAbbr().' '.fake()->postcode(),
+            'address' => fake()->address(),
             'contact_name' => fake()->name(),
             'contact_email' => fake()->companyEmail(),
             'contact_phone' => fake()->phoneNumber(),

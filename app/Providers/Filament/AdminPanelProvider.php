@@ -79,7 +79,7 @@ class AdminPanelProvider extends PanelProvider
                 FilamentGeneralSettingsPlugin::make()
                     ->setSort(3)
                     ->setNavigationGroup('Administración')
-                    ->setNavigationLabel('Configuración General')
+                    ->setNavigationLabel('Configuración de correo')
                     ->setIcon('heroicon-o-cog-6-tooth')
                     ->canAccess(fn () => auth()->user()?->hasRole('super_admin') ?? false),
             ]);

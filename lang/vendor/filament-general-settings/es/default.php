@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'title' => 'Configuración general',
+    'title' => 'Configuración de correo',
     'application' => 'Aplicación',
     'analytics' => 'Analítica',
     'seo' => 'SEO',
