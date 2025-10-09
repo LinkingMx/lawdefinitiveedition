@@ -17,6 +17,7 @@
         "laravel/wayfinder": "^0.1.9",
         "shuvroroy/filament-spatie-laravel-backup": "^2.2",
         "spatie/laravel-backup": "^9.3",
+        "spatie/laravel-database-mail-templates": "^3.7",
         "tapp/filament-maillog": "^1.0"
     },
     "require-dev": {
