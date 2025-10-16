@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Inertia\Response;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class DocumentController extends Controller
@@ -75,6 +76,25 @@ class DocumentController extends Controller
             'documents' => $documents,
             'documentTypes' => $documentTypes,
         ]);
+    }
+
+    /**
+     * Preview a document file in the browser.
+     */
+    public function preview(Document $document): BinaryFileResponse
+    {
+        // Check if user can view this document
+        Gate::authorize('view', $document);
+
+        // Check if file exists
+        if (! Storage::disk('public')->exists($document->file_path)) {
+            abort(404, 'File not found');
+        }
+
+        // Return file response for inline viewing
+        return response()->file(
+            Storage::disk('public')->path($document->file_path)
+        );
     }
 
     /**

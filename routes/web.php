@@ -17,6 +17,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // Document routes
     Route::get('documents', [DocumentController::class, 'index'])->name('documents.index');
+    Route::get('documents/{document}/preview', [DocumentController::class, 'preview'])
+        ->name('documents.preview')
+        ->can('view', 'document');
     Route::get('documents/{document}/download', [DocumentController::class, 'download'])
         ->name('documents.download')
         ->can('download', 'document');

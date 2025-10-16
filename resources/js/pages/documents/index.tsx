@@ -4,7 +4,7 @@ import { EmptyState } from '@/components/empty-state';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import AppLayout from '@/layouts/app-layout';
-import { download as documentsDownload } from '@/routes/documents';
+import { download as documentsDownload, preview as documentsPreview } from '@/routes/documents';
 import { Document, PaginatedDocuments } from '@/types';
 import { Head, Link } from '@inertiajs/react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
@@ -38,7 +38,7 @@ export default function DocumentsIndex({ documents }: DocumentsPageProps) {
 
     const handlePreview = (document: Document) => {
         // Open file in new tab for preview
-        const previewUrl = `/storage/${document.file_path}`;
+        const previewUrl = documentsPreview.url({ document: document.id });
         window.open(previewUrl, '_blank');
     };
 
