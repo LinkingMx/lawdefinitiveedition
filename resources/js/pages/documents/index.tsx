@@ -1,18 +1,12 @@
 import { DocumentCard } from '@/components/document-card';
 import { DocumentDetailsDialog } from '@/components/document-details-dialog';
 import { EmptyState } from '@/components/empty-state';
-import {
-    Pagination,
-    PaginationContent,
-    PaginationItem,
-    PaginationLink,
-    PaginationNext,
-    PaginationPrevious,
-} from '@/components/ui/pagination';
+import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import AppLayout from '@/layouts/app-layout';
 import { Document, PaginatedDocuments } from '@/types';
-import { Head, router } from '@inertiajs/react';
+import { Head, Link, router } from '@inertiajs/react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
@@ -104,49 +98,93 @@ export default function DocumentsIndex({ documents }: DocumentsPageProps) {
 
                         {/* Pagination */}
                         {documents.meta.last_page > 1 && (
-                            <div className="flex justify-center mt-8">
-                                <Pagination>
-                                    <PaginationContent>
-                                        {documents.links[0].url && (
-                                            <PaginationItem>
-                                                <PaginationPrevious
-                                                    href={
-                                                        documents.links[0].url ||
-                                                        '#'
-                                                    }
-                                                />
-                                            </PaginationItem>
-                                        )}
+                            <div className="flex justify-center items-center gap-2 mt-8">
+                                {documents.links[0].url ? (
+                                    <Button
+                                        variant="outline"
+                                        size="sm"
+                                        asChild
+                                    >
+                                        <Link href={documents.links[0].url}>
+                                            <ChevronLeft className="h-4 w-4 mr-1" />
+                                            Previous
+                                        </Link>
+                                    </Button>
+                                ) : (
+                                    <Button
+                                        variant="outline"
+                                        size="sm"
+                                        disabled
+                                    >
+                                        <ChevronLeft className="h-4 w-4 mr-1" />
+                                        Previous
+                                    </Button>
+                                )}
 
-                                        {documents.links
-                                            .slice(1, -1)
-                                            .map((link, index) => (
-                                                <PaginationItem key={index}>
-                                                    <PaginationLink
-                                                        href={link.url || '#'}
-                                                        isActive={link.active}
-                                                    >
+                                <div className="flex items-center gap-2">
+                                    {documents.links
+                                        .slice(1, -1)
+                                        .map((link, index) =>
+                                            link.url ? (
+                                                <Button
+                                                    key={index}
+                                                    variant={
+                                                        link.active
+                                                            ? 'default'
+                                                            : 'outline'
+                                                    }
+                                                    size="sm"
+                                                    asChild
+                                                >
+                                                    <Link href={link.url}>
                                                         {link.label}
-                                                    </PaginationLink>
-                                                </PaginationItem>
-                                            ))}
-
-                                        {documents.links[
-                                            documents.links.length - 1
-                                        ].url && (
-                                            <PaginationItem>
-                                                <PaginationNext
-                                                    href={
-                                                        documents.links[
-                                                            documents.links
-                                                                .length - 1
-                                                        ].url || '#'
+                                                    </Link>
+                                                </Button>
+                                            ) : (
+                                                <Button
+                                                    key={index}
+                                                    variant={
+                                                        link.active
+                                                            ? 'default'
+                                                            : 'outline'
                                                     }
-                                                />
-                                            </PaginationItem>
+                                                    size="sm"
+                                                    disabled
+                                                >
+                                                    {link.label}
+                                                </Button>
+                                            ),
                                         )}
-                                    </PaginationContent>
-                                </Pagination>
+                                </div>
+
+                                {documents.links[documents.links.length - 1]
+                                    .url ? (
+                                    <Button
+                                        variant="outline"
+                                        size="sm"
+                                        asChild
+                                    >
+                                        <Link
+                                            href={
+                                                documents.links[
+                                                    documents.links.length - 1
+                                                ].url
+                                            }
+                                        >
+                                            Next
+                                            <ChevronRight className="h-4 w-4 ml-1" />
+                                        </Link>
+                                    </Button>
+                                ) : (
+                                    <Button
+                                        variant="outline"
+                                        size="sm"
+                                        disabled
+                                    >
+                                        Next
+                                        <ChevronRight className="h-4 w-4 ml-1" />
+                                    </Button>
+                                )}
                             </div>
                         )}
                     </>
