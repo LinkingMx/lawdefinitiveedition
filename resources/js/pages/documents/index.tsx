@@ -71,7 +71,7 @@ export default function DocumentsIndex({ documents }: DocumentsPageProps) {
                 </div>
 
                 {/* Results count */}
-                {documents.data.length > 0 && (
+                {documents.data.length > 0 && documents.meta.from && (
                     <div className="text-sm text-muted-foreground">
                         Mostrando {documents.meta.from} a {documents.meta.to} de{' '}
                         {documents.meta.total} documentos
