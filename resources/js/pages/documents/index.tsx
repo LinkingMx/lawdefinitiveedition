@@ -6,7 +6,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import AppLayout from '@/layouts/app-layout';
 import { download as documentsDownload } from '@/routes/documents';
 import { Document, PaginatedDocuments } from '@/types';
-import { Head, Link, router } from '@inertiajs/react';
+import { Head, Link } from '@inertiajs/react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
@@ -20,33 +20,26 @@ export default function DocumentsIndex({ documents }: DocumentsPageProps) {
         null,
     );
     const [isDialogOpen, setIsDialogOpen] = useState(false);
-    const [downloadingId, setDownloadingId] = useState<number | null>(null);
 
     const handleDownload = (document: Document) => {
-        setDownloadingId(document.id);
+        // Use direct link to trigger file download
+        const downloadUrl = documentsDownload.url({ document: document.id });
+        window.location.href = downloadUrl;
 
-        // Use router.visit for download to trigger file download
-        router.visit(documentsDownload.url({ document: document.id }), {
-            method: 'get',
-            onSuccess: () => {
-                toast.success('Descarga iniciada', {
-                    description: `${document.original_filename} se está descargando.`,
-                });
-                setDownloadingId(null);
-            },
-            onError: () => {
-                toast.error('Error en la descarga', {
-                    description:
-                        'Hubo un error al descargar el documento.',
-                });
-                setDownloadingId(null);
-            },
+        toast.success('Descarga iniciada', {
+            description: `${document.original_filename} se está descargando.`,
         });
     };
 
     const handleViewDetails = (document: Document) => {
         setSelectedDocument(document);
         setIsDialogOpen(true);
+    };
+
+    const handlePreview = (document: Document) => {
+        // Open file in new tab for preview
+        const previewUrl = `/storage/${document.file_path}`;
+        window.open(previewUrl, '_blank');
     };
 
     const handleCloseDialog = () => {
@@ -87,7 +80,7 @@ export default function DocumentsIndex({ documents }: DocumentsPageProps) {
                                     key={document.id}
                                     document={document}
                                     onDownload={handleDownload}
-                                    onViewDetails={handleViewDetails}
+                                    onViewDetails={handlePreview}
                                 />
                             ))}
                         </div>
