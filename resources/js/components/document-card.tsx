@@ -41,7 +41,7 @@ export function DocumentCard({
                     </Badge>
                     {document.is_expired && (
                         <Badge variant="destructive" className="text-xs">
-                            Expired
+                            Vencido
                         </Badge>
                     )}
                     {!document.is_expired && document.expires_at && (
@@ -49,7 +49,7 @@ export function DocumentCard({
                             variant="outline"
                             className="border-green-500 text-green-600 text-xs"
                         >
-                            Valid
+                            Vigente
                         </Badge>
                     )}
                 </div>
@@ -95,7 +95,7 @@ export function DocumentCard({
                     onClick={() => onDownload(document)}
                 >
                     <Download className="h-4 w-4 mr-1" />
-                    Download
+                    Descargar
                 </Button>
                 <Button
                     variant="outline"

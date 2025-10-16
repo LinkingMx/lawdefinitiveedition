@@ -24,7 +24,7 @@ const mainNavItems: NavItem[] = [
         icon: LayoutGrid,
     },
     {
-        title: 'Documents',
+        title: 'Documentos',
         href: documentsIndex.url(),
         icon: FileText,
     },

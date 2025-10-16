@@ -42,7 +42,7 @@ export function DocumentDetailsDialog({
                                 {document.original_filename}
                             </DialogTitle>
                             <DialogDescription className="mt-1">
-                                Document details and information
+                                Detalles e información del documento
                             </DialogDescription>
                         </div>
                     </div>
@@ -55,14 +55,14 @@ export function DocumentDetailsDialog({
                             {document.document_type.name}
                         </Badge>
                         {document.is_expired && (
-                            <Badge variant="destructive">Expired</Badge>
+                            <Badge variant="destructive">Vencido</Badge>
                         )}
                         {!document.is_expired && document.expires_at && (
                             <Badge
                                 variant="outline"
                                 className="border-green-500 text-green-600"
                             >
-                                Valid
+                                Vigente
                             </Badge>
                         )}
                         <Badge variant="outline">{document.branch.name}</Badge>
@@ -72,7 +72,7 @@ export function DocumentDetailsDialog({
                     {document.description && (
                         <div>
                             <h4 className="text-sm font-medium mb-2">
-                                Description
+                                Descripción
                             </h4>
                             <p className="text-sm text-muted-foreground">
                                 {document.description}
@@ -84,7 +84,7 @@ export function DocumentDetailsDialog({
                     <div className="grid grid-cols-2 gap-4 rounded-lg border p-4">
                         <div>
                             <p className="text-xs text-muted-foreground mb-1">
-                                File Size
+                                Tamaño del Archivo
                             </p>
                             <p className="text-sm font-medium">
                                 {formatBytes(document.file_size)}
@@ -92,7 +92,7 @@ export function DocumentDetailsDialog({
                         </div>
                         <div>
                             <p className="text-xs text-muted-foreground mb-1">
-                                File Type
+                                Tipo de Archivo
                             </p>
                             <p className="text-sm font-medium">
                                 {document.mime_type}
@@ -100,7 +100,7 @@ export function DocumentDetailsDialog({
                         </div>
                         <div>
                             <p className="text-xs text-muted-foreground mb-1">
-                                Uploaded By
+                                Subido por
                             </p>
                             <p className="text-sm font-medium">
                                 {document.uploaded_by_user.name}
@@ -108,7 +108,7 @@ export function DocumentDetailsDialog({
                         </div>
                         <div>
                             <p className="text-xs text-muted-foreground mb-1">
-                                Uploaded Date
+                                Fecha de Subida
                             </p>
                             <p className="text-sm font-medium">
                                 {formatDate(document.created_at)}
@@ -117,7 +117,7 @@ export function DocumentDetailsDialog({
                         {document.expires_at && (
                             <div>
                                 <p className="text-xs text-muted-foreground mb-1">
-                                    Expiration Date
+                                    Fecha de Vencimiento
                                 </p>
                                 <p
                                     className={`text-sm font-medium ${
@@ -132,7 +132,7 @@ export function DocumentDetailsDialog({
                         )}
                         <div>
                             <p className="text-xs text-muted-foreground mb-1">
-                                Branch
+                                Sucursal
                             </p>
                             <p className="text-sm font-medium">
                                 {document.branch.name}
@@ -146,12 +146,12 @@ export function DocumentDetailsDialog({
                         document.branch.contact_phone) && (
                         <div className="rounded-lg border p-4 space-y-2">
                             <h4 className="text-sm font-medium mb-2">
-                                Branch Information
+                                Información de la Sucursal
                             </h4>
                             {document.branch.address && (
                                 <div>
                                     <p className="text-xs text-muted-foreground">
-                                        Address
+                                        Dirección
                                     </p>
                                     <p className="text-sm">
                                         {document.branch.address}
@@ -161,7 +161,7 @@ export function DocumentDetailsDialog({
                             {document.branch.contact_email && (
                                 <div>
                                     <p className="text-xs text-muted-foreground">
-                                        Email
+                                        Correo Electrónico
                                     </p>
                                     <p className="text-sm">
                                         {document.branch.contact_email}
@@ -171,7 +171,7 @@ export function DocumentDetailsDialog({
                             {document.branch.contact_phone && (
                                 <div>
                                     <p className="text-xs text-muted-foreground">
-                                        Phone
+                                        Teléfono
                                     </p>
                                     <p className="text-sm">
                                         {document.branch.contact_phone}
@@ -184,11 +184,11 @@ export function DocumentDetailsDialog({
 
                 <DialogFooter>
                     <Button variant="outline" onClick={onClose}>
-                        Close
+                        Cerrar
                     </Button>
                     <Button onClick={() => onDownload(document)}>
                         <Download className="h-4 w-4 mr-2" />
-                        Download
+                        Descargar
                     </Button>
                 </DialogFooter>
             </DialogContent>

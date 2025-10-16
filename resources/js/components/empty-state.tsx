@@ -6,8 +6,8 @@ interface EmptyStateProps {
 }
 
 export function EmptyState({
-    title = 'No documents found',
-    description = "You don't have any documents available in your branches yet.",
+    title = 'No se encontraron documentos',
+    description = 'Aún no tienes documentos disponibles en tus sucursales.',
 }: EmptyStateProps) {
     return (
         <div className="flex flex-col items-center justify-center py-16 px-4 text-center">

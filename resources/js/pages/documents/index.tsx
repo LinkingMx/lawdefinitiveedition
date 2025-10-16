@@ -29,15 +29,15 @@ export default function DocumentsIndex({ documents }: DocumentsPageProps) {
         router.visit(documentsDownload.url({ document: document.id }), {
             method: 'get',
             onSuccess: () => {
-                toast.success('Download started', {
-                    description: `${document.original_filename} is being downloaded.`,
+                toast.success('Descarga iniciada', {
+                    description: `${document.original_filename} se está descargando.`,
                 });
                 setDownloadingId(null);
             },
             onError: () => {
-                toast.error('Download failed', {
+                toast.error('Error en la descarga', {
                     description:
-                        'There was an error downloading the document.',
+                        'Hubo un error al descargar el documento.',
                 });
                 setDownloadingId(null);
             },
@@ -57,24 +57,24 @@ export default function DocumentsIndex({ documents }: DocumentsPageProps) {
 
     return (
         <AppLayout>
-            <Head title="Documents" />
+            <Head title="Documentos" />
 
             <div className="space-y-6 p-6">
                 {/* Header */}
                 <div>
                     <h1 className="text-3xl font-bold tracking-tight">
-                        Documents
+                        Documentos
                     </h1>
                     <p className="text-muted-foreground mt-2">
-                        View and download documents from your assigned branches.
+                        Visualiza y descarga documentos de tus sucursales asignadas.
                     </p>
                 </div>
 
                 {/* Results count */}
                 {documents.data.length > 0 && (
                     <div className="text-sm text-muted-foreground">
-                        Showing {documents.meta.from} to {documents.meta.to} of{' '}
-                        {documents.meta.total} documents
+                        Mostrando {documents.meta.from} a {documents.meta.to} de{' '}
+                        {documents.meta.total} documentos
                     </div>
                 )}
 
@@ -103,7 +103,7 @@ export default function DocumentsIndex({ documents }: DocumentsPageProps) {
                                     >
                                         <Link href={documents.links[0].url}>
                                             <ChevronLeft className="h-4 w-4 mr-1" />
-                                            Previous
+                                            Anterior
                                         </Link>
                                     </Button>
                                 ) : (
@@ -113,7 +113,7 @@ export default function DocumentsIndex({ documents }: DocumentsPageProps) {
                                         disabled
                                     >
                                         <ChevronLeft className="h-4 w-4 mr-1" />
-                                        Previous
+                                        Anterior
                                     </Button>
                                 )}
 
@@ -167,7 +167,7 @@ export default function DocumentsIndex({ documents }: DocumentsPageProps) {
                                                 ].url
                                             }
                                         >
-                                            Next
+                                            Siguiente
                                             <ChevronRight className="h-4 w-4 ml-1" />
                                         </Link>
                                     </Button>
@@ -177,7 +177,7 @@ export default function DocumentsIndex({ documents }: DocumentsPageProps) {
                                         size="sm"
                                         disabled
                                     >
-                                        Next
+                                        Siguiente
                                         <ChevronRight className="h-4 w-4 ml-1" />
                                     </Button>
                                 )}
