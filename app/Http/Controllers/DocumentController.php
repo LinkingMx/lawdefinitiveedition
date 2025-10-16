@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Inertia\Response;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class DocumentController extends Controller
 {
@@ -80,7 +80,7 @@ class DocumentController extends Controller
     /**
      * Download a document file.
      */
-    public function download(Document $document): BinaryFileResponse
+    public function download(Document $document): StreamedResponse
     {
         // Check if user can download this document
         Gate::authorize('download', $document);
