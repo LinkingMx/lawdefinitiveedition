@@ -15,7 +15,13 @@ class DocumentPolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->can('view_any_document');
+        // For admin panel, check permission
+        if ($user->can('view_any_document')) {
+            return true;
+        }
+
+        // For frontend, user must have at least one branch assigned
+        return $user->branches()->exists();
     }
 
     /**
@@ -23,7 +29,22 @@ class DocumentPolicy
      */
     public function view(User $user, Document $document): bool
     {
-        return $user->can('view_document');
+        // For admin panel, check permission
+        if ($user->can('view_document')) {
+            return true;
+        }
+
+        // For frontend, document's branch must be in user's branches
+        return $user->branches()->where('branches.id', $document->branch_id)->exists();
+    }
+
+    /**
+     * Determine whether the user can download the document.
+     */
+    public function download(User $user, Document $document): bool
+    {
+        // User can download if they can view
+        return $this->view($user, $document);
     }
 
     /**

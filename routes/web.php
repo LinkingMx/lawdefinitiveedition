@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DocumentController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -13,6 +14,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', function () {
         return Inertia::render('dashboard');
     })->name('dashboard');
+
+    // Document routes
+    Route::get('documents', [DocumentController::class, 'index'])->name('documents.index');
+    Route::get('documents/{document}/download', [DocumentController::class, 'download'])
+        ->name('documents.download')
+        ->can('download', 'document');
 });
 
 require __DIR__.'/settings.php';
