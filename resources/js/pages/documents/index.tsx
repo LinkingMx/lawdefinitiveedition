@@ -71,10 +71,10 @@ export default function DocumentsIndex({ documents }: DocumentsPageProps) {
                 </div>
 
                 {/* Results count */}
-                {documents.data.length > 0 && documents.meta.from && (
+                {documents.data.length > 0 && documents.from && (
                     <div className="text-sm text-muted-foreground">
-                        Mostrando {documents.meta.from} a {documents.meta.to} de{' '}
-                        {documents.meta.total} documentos
+                        Mostrando {documents.from} a {documents.to} de{' '}
+                        {documents.total} documentos
                     </div>
                 )}
 
@@ -93,7 +93,7 @@ export default function DocumentsIndex({ documents }: DocumentsPageProps) {
                         </div>
 
                         {/* Pagination */}
-                        {documents.meta.last_page > 1 && (
+                        {documents.last_page > 1 && (
                             <div className="flex justify-center items-center gap-2 mt-8">
                                 {documents.links[0].url ? (
                                     <Button
