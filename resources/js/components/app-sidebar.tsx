@@ -11,6 +11,7 @@ import {
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
 import { dashboard } from '@/routes';
+import { index as documentsIndex } from '@/routes/documents';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
 import { BookOpen, FileText, Folder, LayoutGrid } from 'lucide-react';
@@ -24,7 +25,7 @@ const mainNavItems: NavItem[] = [
     },
     {
         title: 'Documents',
-        href: route('documents.index'),
+        href: documentsIndex.url(),
         icon: FileText,
     },
 ];

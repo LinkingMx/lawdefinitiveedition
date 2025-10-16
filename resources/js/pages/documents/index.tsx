@@ -4,6 +4,7 @@ import { EmptyState } from '@/components/empty-state';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import AppLayout from '@/layouts/app-layout';
+import { download as documentsDownload } from '@/routes/documents';
 import { Document, PaginatedDocuments } from '@/types';
 import { Head, Link, router } from '@inertiajs/react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
@@ -25,27 +26,22 @@ export default function DocumentsIndex({ documents }: DocumentsPageProps) {
         setDownloadingId(document.id);
 
         // Use router.visit for download to trigger file download
-        router.visit(
-            route('documents.download', {
-                document: document.id,
-            }),
-            {
-                method: 'get',
-                onSuccess: () => {
-                    toast.success('Download started', {
-                        description: `${document.original_filename} is being downloaded.`,
-                    });
-                    setDownloadingId(null);
-                },
-                onError: () => {
-                    toast.error('Download failed', {
-                        description:
-                            'There was an error downloading the document.',
-                    });
-                    setDownloadingId(null);
-                },
+        router.visit(documentsDownload.url({ document: document.id }), {
+            method: 'get',
+            onSuccess: () => {
+                toast.success('Download started', {
+                    description: `${document.original_filename} is being downloaded.`,
+                });
+                setDownloadingId(null);
             },
-        );
+            onError: () => {
+                toast.error('Download failed', {
+                    description:
+                        'There was an error downloading the document.',
+                });
+                setDownloadingId(null);
+            },
+        });
     };
 
     const handleViewDetails = (document: Document) => {
