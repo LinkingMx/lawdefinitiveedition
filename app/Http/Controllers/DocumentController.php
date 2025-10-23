@@ -27,12 +27,23 @@ class DocumentController extends Controller
         // Get user's branch IDs
         $userBranchIds = $request->user()->branches()->pluck('branches.id');
 
+        // Get filter parameters from request
+        $documentTypeFilter = $request->input('document_type_id');
+        $branchFilter = $request->input('branch_id');
+
         // Query documents filtered by user's branches
         $documents = Document::query()
             ->with(['documentType', 'branch', 'uploadedBy'])
             ->whereIn('branch_id', $userBranchIds)
+            ->when($documentTypeFilter, function ($query) use ($documentTypeFilter) {
+                $query->where('document_type_id', $documentTypeFilter);
+            })
+            ->when($branchFilter, function ($query) use ($branchFilter) {
+                $query->where('branch_id', $branchFilter);
+            })
             ->latest('created_at')
             ->paginate(10)
+            ->withQueryString()
             ->through(fn (Document $document) => [
                 'id' => $document->id,
                 'document_type_id' => $document->document_type_id,
@@ -67,14 +78,28 @@ class DocumentController extends Controller
                 ],
             ]);
 
-        // Get all document types for filter dropdown
+        // Get only document types that have documents in user's branches
         $documentTypes = DocumentType::query()
+            ->whereHas('documents', function ($query) use ($userBranchIds) {
+                $query->whereIn('branch_id', $userBranchIds);
+            })
             ->orderBy('name')
             ->get(['id', 'name']);
+
+        // Get only user's branches that have documents
+        $branches = $request->user()->branches()
+            ->whereHas('documents')
+            ->orderBy('name')
+            ->get(['branches.id', 'branches.name']);
 
         return Inertia::render('documents/index', [
             'documents' => $documents,
             'documentTypes' => $documentTypes,
+            'branches' => $branches,
+            'filters' => [
+                'document_type_id' => $documentTypeFilter,
+                'branch_id' => $branchFilter,
+            ],
         ]);
     }
 

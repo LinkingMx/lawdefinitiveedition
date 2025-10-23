@@ -1,11 +1,15 @@
 import { DocumentCard } from '@/components/document-card';
 import { DocumentDetailsDialog } from '@/components/document-details-dialog';
+import { DocumentsFilters } from '@/components/documents-filters';
 import { EmptyState } from '@/components/empty-state';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import AppLayout from '@/layouts/app-layout';
-import { download as documentsDownload, preview as documentsPreview } from '@/routes/documents';
-import { Document, PaginatedDocuments } from '@/types';
+import {
+    download as documentsDownload,
+    preview as documentsPreview,
+} from '@/routes/documents';
+import { Branch, Document, DocumentType, PaginatedDocuments } from '@/types';
 import { Head, Link } from '@inertiajs/react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useState } from 'react';
@@ -13,9 +17,20 @@ import { toast } from 'sonner';
 
 interface DocumentsPageProps {
     documents: PaginatedDocuments;
+    documentTypes: DocumentType[];
+    branches: Branch[];
+    filters: {
+        document_type_id?: string | null;
+        branch_id?: string | null;
+    };
 }
 
-export default function DocumentsIndex({ documents }: DocumentsPageProps) {
+export default function DocumentsIndex({
+    documents,
+    documentTypes,
+    branches,
+    filters,
+}: DocumentsPageProps) {
     const [selectedDocument, setSelectedDocument] = useState<Document | null>(
         null,
     );
@@ -58,10 +73,18 @@ export default function DocumentsIndex({ documents }: DocumentsPageProps) {
                     <h1 className="text-3xl font-bold tracking-tight">
                         Documentos
                     </h1>
-                    <p className="text-muted-foreground mt-2">
-                        Visualiza y descarga documentos de tus sucursales asignadas.
+                    <p className="mt-2 text-muted-foreground">
+                        Visualiza y descarga documentos de tus sucursales
+                        asignadas.
                     </p>
                 </div>
+
+                {/* Filters */}
+                <DocumentsFilters
+                    documentTypes={documentTypes}
+                    branches={branches}
+                    filters={filters}
+                />
 
                 {/* Results count */}
                 {documents.data.length > 0 && documents.from && (
@@ -74,7 +97,7 @@ export default function DocumentsIndex({ documents }: DocumentsPageProps) {
                 {/* Documents Grid */}
                 {documents.data.length > 0 ? (
                     <>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                             {documents.data.map((document) => (
                                 <DocumentCard
                                     key={document.id}
@@ -87,15 +110,11 @@ export default function DocumentsIndex({ documents }: DocumentsPageProps) {
 
                         {/* Pagination */}
                         {documents.last_page > 1 && (
-                            <div className="flex justify-center items-center gap-2 mt-8">
+                            <div className="mt-8 flex items-center justify-center gap-2">
                                 {documents.links[0].url ? (
-                                    <Button
-                                        variant="outline"
-                                        size="sm"
-                                        asChild
-                                    >
+                                    <Button variant="outline" size="sm" asChild>
                                         <Link href={documents.links[0].url}>
-                                            <ChevronLeft className="h-4 w-4 mr-1" />
+                                            <ChevronLeft className="mr-1 h-4 w-4" />
                                             Anterior
                                         </Link>
                                     </Button>
@@ -105,7 +124,7 @@ export default function DocumentsIndex({ documents }: DocumentsPageProps) {
                                         size="sm"
                                         disabled
                                     >
-                                        <ChevronLeft className="h-4 w-4 mr-1" />
+                                        <ChevronLeft className="mr-1 h-4 w-4" />
                                         Anterior
                                     </Button>
                                 )}
@@ -148,11 +167,7 @@ export default function DocumentsIndex({ documents }: DocumentsPageProps) {
 
                                 {documents.links[documents.links.length - 1]
                                     .url ? (
-                                    <Button
-                                        variant="outline"
-                                        size="sm"
-                                        asChild
-                                    >
+                                    <Button variant="outline" size="sm" asChild>
                                         <Link
                                             href={
                                                 documents.links[
@@ -161,7 +176,7 @@ export default function DocumentsIndex({ documents }: DocumentsPageProps) {
                                             }
                                         >
                                             Siguiente
-                                            <ChevronRight className="h-4 w-4 ml-1" />
+                                            <ChevronRight className="ml-1 h-4 w-4" />
                                         </Link>
                                     </Button>
                                 ) : (
@@ -171,7 +186,7 @@ export default function DocumentsIndex({ documents }: DocumentsPageProps) {
                                         disabled
                                     >
                                         Siguiente
-                                        <ChevronRight className="h-4 w-4 ml-1" />
+                                        <ChevronRight className="ml-1 h-4 w-4" />
                                     </Button>
                                 )}
                             </div>
@@ -196,7 +211,7 @@ export default function DocumentsIndex({ documents }: DocumentsPageProps) {
 // Loading skeleton (can be used for initial page load)
 function DocumentsLoading() {
     return (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {Array.from({ length: 8 }).map((_, i) => (
                 <Skeleton key={i} className="h-64 rounded-lg" />
             ))}

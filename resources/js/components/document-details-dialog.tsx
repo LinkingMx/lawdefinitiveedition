@@ -37,7 +37,7 @@ export function DocumentDetailsDialog({
                         <div className="rounded-lg bg-muted p-3">
                             <FileIcon className="h-6 w-6 text-muted-foreground" />
                         </div>
-                        <div className="flex-1 min-w-0">
+                        <div className="min-w-0 flex-1">
                             <DialogTitle className="text-lg">
                                 {document.original_filename}
                             </DialogTitle>
@@ -71,7 +71,7 @@ export function DocumentDetailsDialog({
                     {/* Description */}
                     {document.description && (
                         <div>
-                            <h4 className="text-sm font-medium mb-2">
+                            <h4 className="mb-2 text-sm font-medium">
                                 Descripción
                             </h4>
                             <p className="text-sm text-muted-foreground">
@@ -83,7 +83,7 @@ export function DocumentDetailsDialog({
                     {/* Metadata Grid */}
                     <div className="grid grid-cols-2 gap-4 rounded-lg border p-4">
                         <div>
-                            <p className="text-xs text-muted-foreground mb-1">
+                            <p className="mb-1 text-xs text-muted-foreground">
                                 Tamaño del Archivo
                             </p>
                             <p className="text-sm font-medium">
@@ -91,7 +91,7 @@ export function DocumentDetailsDialog({
                             </p>
                         </div>
                         <div>
-                            <p className="text-xs text-muted-foreground mb-1">
+                            <p className="mb-1 text-xs text-muted-foreground">
                                 Tipo de Archivo
                             </p>
                             <p className="text-sm font-medium">
@@ -99,7 +99,7 @@ export function DocumentDetailsDialog({
                             </p>
                         </div>
                         <div>
-                            <p className="text-xs text-muted-foreground mb-1">
+                            <p className="mb-1 text-xs text-muted-foreground">
                                 Subido por
                             </p>
                             <p className="text-sm font-medium">
@@ -107,7 +107,7 @@ export function DocumentDetailsDialog({
                             </p>
                         </div>
                         <div>
-                            <p className="text-xs text-muted-foreground mb-1">
+                            <p className="mb-1 text-xs text-muted-foreground">
                                 Fecha de Subida
                             </p>
                             <p className="text-sm font-medium">
@@ -116,7 +116,7 @@ export function DocumentDetailsDialog({
                         </div>
                         {document.expires_at && (
                             <div>
-                                <p className="text-xs text-muted-foreground mb-1">
+                                <p className="mb-1 text-xs text-muted-foreground">
                                     Fecha de Vencimiento
                                 </p>
                                 <p
@@ -131,7 +131,7 @@ export function DocumentDetailsDialog({
                             </div>
                         )}
                         <div>
-                            <p className="text-xs text-muted-foreground mb-1">
+                            <p className="mb-1 text-xs text-muted-foreground">
                                 Sucursal
                             </p>
                             <p className="text-sm font-medium">
@@ -144,8 +144,8 @@ export function DocumentDetailsDialog({
                     {(document.branch.address ||
                         document.branch.contact_email ||
                         document.branch.contact_phone) && (
-                        <div className="rounded-lg border p-4 space-y-2">
-                            <h4 className="text-sm font-medium mb-2">
+                        <div className="space-y-2 rounded-lg border p-4">
+                            <h4 className="mb-2 text-sm font-medium">
                                 Información de la Sucursal
                             </h4>
                             {document.branch.address && (
@@ -187,7 +187,7 @@ export function DocumentDetailsDialog({
                         Cerrar
                     </Button>
                     <Button onClick={() => onDownload(document)}>
-                        <Download className="h-4 w-4 mr-2" />
+                        <Download className="mr-2 h-4 w-4" />
                         Descargar
                     </Button>
                 </DialogFooter>
