@@ -35,22 +35,22 @@ export function DocumentCard({
             }`}
         >
             <CardHeader className="space-y-2 pb-3">
-                <div className="flex items-start justify-between gap-2">
+                <div className="flex flex-col gap-2">
                     <Badge
                         variant="secondary"
-                        className="border-[#897053]/20 bg-[#897053]/10 text-xs text-[#897053] dark:bg-[#897053]/20 dark:text-[#b89876]"
+                        className="w-fit border-[#897053]/20 bg-[#897053]/10 text-xs text-[#897053] dark:bg-[#897053]/20 dark:text-[#b89876]"
                     >
                         {document.document_type.name}
                     </Badge>
                     {document.is_expired && (
-                        <Badge variant="destructive" className="text-xs">
+                        <Badge variant="destructive" className="w-fit text-xs">
                             Vencido
                         </Badge>
                     )}
                     {!document.is_expired && document.expires_at && (
                         <Badge
                             variant="outline"
-                            className="border-emerald-600 bg-emerald-50 text-xs text-emerald-700 dark:border-emerald-500 dark:bg-emerald-950/30 dark:text-emerald-400"
+                            className="w-fit border-emerald-600 bg-emerald-50 text-xs text-emerald-700 dark:border-emerald-500 dark:bg-emerald-950/30 dark:text-emerald-400"
                         >
                             Vigente
                         </Badge>
