@@ -147,6 +147,20 @@ class UserResource extends Resource
                             ->helperText('Asignar el usuario a una o más sucursales')
                             ->columnSpanFull(),
                     ]),
+
+                Forms\Components\Section::make('Roles y Permisos')
+                    ->description('Asignar roles que determinan los permisos del usuario')
+                    ->schema([
+                        Forms\Components\Select::make('roles')
+                            ->label('Roles')
+                            ->relationship('roles', 'name')
+                            ->multiple()
+                            ->preload()
+                            ->searchable()
+                            ->prefixIcon('heroicon-o-shield-check')
+                            ->helperText('Los roles definen los permisos y accesos del usuario en el sistema')
+                            ->columnSpanFull(),
+                    ]),
             ]);
     }
 
@@ -204,6 +218,14 @@ class UserResource extends Resource
                     ->separator(',')
                     ->placeholder('Sin sucursales'),
 
+                Tables\Columns\TextColumn::make('roles.name')
+                    ->label('Roles')
+                    ->badge()
+                    ->separator(',')
+                    ->color('primary')
+                    ->icon('heroicon-o-shield-check')
+                    ->placeholder('Sin roles'),
+
                 Tables\Columns\TextColumn::make('last_login_at')
                     ->label('Último Acceso')
                     ->dateTime()
@@ -254,6 +276,12 @@ class UserResource extends Resource
                 Tables\Filters\Filter::make('two_factor_disabled')
                     ->label('Verificación en 2 Pasos Deshabilitada')
                     ->query(fn (Builder $query): Builder => $query->whereNull('two_factor_confirmed_at')),
+
+                Tables\Filters\SelectFilter::make('roles')
+                    ->label('Rol')
+                    ->relationship('roles', 'name')
+                    ->multiple()
+                    ->preload(),
 
                 Tables\Filters\TrashedFilter::make(),
             ])
